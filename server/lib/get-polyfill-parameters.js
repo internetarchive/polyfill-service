@@ -1,6 +1,5 @@
 "use strict";
 
-const latestVersion = require("polyfill-library/package.json").version;
 const featuresfromQueryParameter = require("./features-from-query-parameter");
 
 function getCompressionFromAcceptEncoding(request) {
@@ -15,7 +14,7 @@ function getCompressionFromAcceptEncoding(request) {
 module.exports = function getPolyfillParameters(request = {}) {
 	const query = request.query || {};
 	const path = request.path || "";
-	const { excludes = "", features = "default", rum, unknown = "polyfill", version, callback, ua, flags } = query;
+	const { excludes = "", features = "default", rum, unknown = "polyfill", callback, ua, flags } = query;
 	const uaString = ua || (request.headers && request.headers["user-agent"]) || (typeof request.get === "function" && request.get("User-Agent")) || "";
 	const compression = query.compression && query.compression !== "identity" ? query.compression : getCompressionFromAcceptEncoding(request);
 	const strict = Object.prototype.hasOwnProperty.call(query, "strict");
@@ -29,8 +28,7 @@ module.exports = function getPolyfillParameters(request = {}) {
 		callback: /^[\w.]+$/.test(callback || "") ? callback : false,
 		unknown,
 		uaString,
-		version: version || latestVersion,
 		compression,
-		strict
+		strict,
 	};
 };
